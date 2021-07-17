@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, PreconditionFailedException } from "@nestjs/common";
+import { BadRequestException, Injectable, InternalServerErrorException, PreconditionFailedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { UserProFile } from "src/dto/userProfile.dto";
@@ -33,12 +33,35 @@ export class UsersService {
     } 
     private async isExistedEmail(email: string): Promise<Boolean> {
         const user = await this.userModel.findOne({email: email});
-        console.log(user);
-        
+    
         return user ? true: false;
     }
     private async verifyCredential(email: string, password: string): Promise<Boolean> {
         const user = await this.userModel.findOne({email: email, password: password});
         return user ? true: false;
+
+    }
+    public async getUserInfoById(userId: string) {
+       try {
+           const user = await this.userModel.findById(userId);
+           if(!user) {
+               throw new BadRequestException("Can not find this user");
+           }
+           return user;
+       } catch (error) {
+           throw new InternalServerErrorException(error)
+       }
+
+    }
+    public async findOne(username: string): Promise<UserDocument> {
+        try {
+            const user = await this.userModel.findOne({email: username});
+            if(!user) {
+                throw new BadRequestException("This user not exist")
+            }
+            return user;
+        } catch (error) {
+            throw new InternalServerErrorException(error)
+        }
     }
 }
