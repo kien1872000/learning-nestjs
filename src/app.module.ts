@@ -6,6 +6,7 @@ import { ConfigsModule } from './configs/configs.module';
 import { ConfigsService } from './configs/configs.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { NotificationsModule } from './notifications/notifications.modulte';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { AuthModule } from './auth/auth.module';
       inject: [ConfigsService],
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
+    NotificationsModule
   ],
 
   controllers: [AppController],

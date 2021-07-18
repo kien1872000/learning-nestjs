@@ -4,12 +4,14 @@ import { AuthGuard } from '@nestjs/passport';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/local.authguard';
-
+import * as admin from 'firebase-admin';
+import { NotificationsService } from './notifications/notifications.service';
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationsService: NotificationsService
     ) { }
 
   @Get()
@@ -22,5 +24,15 @@ export class AppController {
 
 
     return this.authService.login(req.user);
+  }
+
+  @Post('notification')
+  async notification() {
+      const token = "12342323123";
+      const payload = {notification: {
+        title: "Hello",
+        body: "Hello 11111"
+      }};
+      return this.notificationsService.sendNotification(token, payload);
   }
 }

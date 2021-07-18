@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
+import { GoogleStrategy } from "src/auth/google/google.strategy";
 import { User, UserSchema } from "src/entities/user.entity";
 import { UsersController } from "./users.controller";
 import { UsersService } from "./users.service";
