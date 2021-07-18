@@ -6,6 +6,7 @@ import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/local.authguard';
 import * as admin from 'firebase-admin';
 import { NotificationsService } from './notifications/notifications.service';
+import { Cron, CronExpression } from '@nestjs/schedule';
 @Controller()
 export class AppController {
   constructor(
@@ -26,6 +27,7 @@ export class AppController {
     return this.authService.login(req.user);
   }
 
+  @Cron(CronExpression.EVERY_5_SECONDS)
   @Post('notification')
   async notification() {
       const token = "12342323123";
@@ -33,6 +35,9 @@ export class AppController {
         title: "Hello",
         body: "Hello 11111"
       }};
+      const result = this.notificationsService.sendNotification(token, payload);
+      console.log(await result);
+      
       return this.notificationsService.sendNotification(token, payload);
   }
 }

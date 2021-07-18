@@ -7,6 +7,7 @@ import { ConfigsService } from './configs/configs.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { NotificationsModule } from './notifications/notifications.modulte';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { NotificationsModule } from './notifications/notifications.modulte';
     }),
     UsersModule,
     AuthModule,
-    NotificationsModule
+    NotificationsModule,
+    ScheduleModule.forRoot()
   ],
 
   controllers: [AppController],
