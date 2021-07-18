@@ -19,25 +19,5 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-  @UseGuards(LocalAuthGuard)
-  @Post('auth/login')
-  async login(@Request() req) {
 
-
-    return this.authService.login(req.user);
-  }
-
-  @Cron(CronExpression.EVERY_5_SECONDS)
-  @Post('notification')
-  async notification() {
-      const token = "12342323123";
-      const payload = {notification: {
-        title: "Hello",
-        body: "Hello 11111"
-      }};
-      const result = this.notificationsService.sendNotification(token, payload);
-      console.log(await result);
-      
-      return this.notificationsService.sendNotification(token, payload);
-  }
 }

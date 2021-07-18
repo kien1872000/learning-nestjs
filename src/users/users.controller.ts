@@ -1,17 +1,19 @@
-import { Body, Controller, Get, Req, Param, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Request, Param, Post, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { LocalAuthGuard } from "src/auth/local.authguard";
 import { UserLogin } from "src/dto/login.dto";
 import { UserSignUp } from "src/dto/userSignUp.dto";
 import { UsersService } from "./users.service";
-import * as admin from 'firebase-admin';
+import { JwtAuthGuard } from "src/auth/jwt.authguard";
+import { AuthService } from "src/auth/auth.service";
 @ApiTags('User')
 @ApiBearerAuth()
-@Controller('google')
+@Controller('users')
 export class UsersController {
     constructor(
-        private usersService: UsersService
+        private usersService: UsersService,
+        private authService: AuthService
     ) { }
     @Post('signUp')
     @ApiOperation({ description: 'Register an account' })
@@ -22,32 +24,30 @@ export class UsersController {
         return this.usersService.signUp(userSignUp)
     }
 
+
+
+    @UseGuards(JwtAuthGuard)
+    @Get('user/info')
+    async getUserInfoById(@Request() req) {
+
+        return this.usersService.getUserInfoById(req.user.userId);
+
+    }
+
+   
+}
+
+
+@ApiTags('Login')
+@Controller('users')
+export class UserLoginController {
+    constructor(private authService: AuthService) { }
+    @UseGuards(LocalAuthGuard)
     @Post('login')
     @ApiOperation({ description: 'Login with an account' })
     @ApiBody({ type: UserLogin })
-    async login(
-        @Body('email') email: string,
-        @Body('password') password: string
-    ) {
-        return this.usersService.login(email, password);
+    @Post('auth/login')
+    async login(@Request() req) {
+        return this.authService.login(req.user);
     }
-
-    @UseGuards(AuthGuard('jwt'))
-    @Get('user/:userId')
-    @ApiParam({ type: String, required: true, name: 'userId' })
-    async getUserInfoById(@Param('userId') userId: string) {
-        return this.usersService.getUserInfoById(userId);
-    }
-
-    @Get('google')
-    @UseGuards(AuthGuard('google'))
-    async googleAuth() { }
-
-    @Get('redirect')
-    @UseGuards(AuthGuard('google'))
-    async googleAuthRedirect(@Req() req) {
-        return this.usersService.googleLogin(req)
-    }
-
-
 }

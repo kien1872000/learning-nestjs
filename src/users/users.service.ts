@@ -31,10 +31,27 @@ export class UsersService {
         }
         return await this.verifyCredential(email, password) ? "Success" : "Failed";
     }
-    private async isExistedEmail(email: string): Promise<Boolean> {
+    public async isExistedEmail(email: string): Promise<Boolean> {
         const user = await this.userModel.findOne({ email: email });
 
         return user ? true : false;
+    }
+    public async getUserByEmail(email: string): Promise<UserDocument> {
+        const user = await this.userModel.findOne({ email: email });
+
+        return user;
+    }
+    public async addNewUser(email: string, password: string): Promise<UserDocument> {
+        try {
+            return await new this.userModel({
+                email: email,
+                password: password,
+                age: 0,
+                address: ""
+            }).save();
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
     }
     private async verifyCredential(email: string, password: string): Promise<Boolean> {
         const user = await this.userModel.findOne({ email: email, password: password });
