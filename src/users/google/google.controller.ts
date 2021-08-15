@@ -16,7 +16,6 @@ export class GoogleController {
     @Post('login')
     @ApiBody({type: GoogleLogin})
     async loginWithGoogle(@Body('accessToken') accessToken: string) {
-        console.log(accessToken);
         return this.googleService.loginWithGoogle(accessToken);
         
     } 

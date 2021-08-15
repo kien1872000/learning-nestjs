@@ -45,10 +45,6 @@ export class MailProcessor {
 
     const url = `http://localhost:8080/mail/${job.data.code}/confirm`
 
-    // if (config.get<boolean>('mail.live')) {
-    //   return 'SENT MOCK CONFIRMATION EMAIL'
-    // }
-
     try {
       const result = await this.mailerService.sendMail({
         template: './confirmation',
@@ -63,7 +59,7 @@ export class MailProcessor {
 
     } catch (error) {
       this.logger.error(
-        `Failed to send confirmation email to '${job.data.email}'`,
+        `Failed to send invitation email to '${job.data.email}'`,
         error.stack,
       );
       throw error;

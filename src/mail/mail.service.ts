@@ -9,7 +9,6 @@ export class MailService {
 
   async sendConfirmationEmail(email: string, code: string): Promise<boolean> {
     try {
-        
       await this.mailQueue.add('confirmation', {
         email,
         code,

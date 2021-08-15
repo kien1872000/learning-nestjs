@@ -3,6 +3,8 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { AuthModule } from "src/auth/auth.module";
 import { User, UserSchema } from "src/entities/user.entity";
 import { MailModule } from "src/mail/mai.module";
+import { NotificationsModule } from "src/notifications/notifications.modulte";
+import { NotificationsService } from "src/notifications/notifications.service";
 import { GoogleController } from "./google/google.controller";
 import { GoogleService } from "./google/google.service";
 import { UserLoginController, UsersController } from "./users.controller";
@@ -18,6 +20,7 @@ import { UsersService } from "./users.service";
     ]),
     forwardRef(() => AuthModule),
     MailModule,
+    NotificationsModule,
   ],
   controllers: [UsersController, GoogleController, UserLoginController],
   providers: [UsersService, GoogleService],

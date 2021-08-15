@@ -16,8 +16,7 @@ import { ConfigsService } from 'src/configs/configs.service'
         transport: {
           host: configService.get('MAIL_HOST'),
           port: configService.get('MAIL_PORT'),
-          //secure: config.get<boolean>('mail.secure'),
-          tls: { ciphers: 'SSLv3' }, // gmail
+          secure: true,
           auth: {
             user: configService.get('MAIL_USERNAME'),
             pass: configService.get('MAIL_PASSWORD'),
@@ -38,7 +37,7 @@ import { ConfigsService } from 'src/configs/configs.service'
     BullModule.registerQueueAsync({
       imports: [ConfigsModule],
       inject: [ConfigsService],
-      name: new ConfigsService().get('QUEUE_NAME'),
+      name: 'mail',
       useFactory: (configService: ConfigsService) => ({
         redis: {
           host: configService.get('REDIS_HOST'),
